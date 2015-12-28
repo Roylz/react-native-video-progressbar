@@ -81,7 +81,7 @@ const ProgressBar = React.createClass({
 
     this._processStyle.style.width = width * this._getProgressPercentage(nextProps.currentTime, nextProps.duration)    
     
-    //update only if user select new time point
+    //update only if user select new time
 
     if(nextProps.currentTime !== this.props.currentTime){
       this._updateProgress();
@@ -141,6 +141,7 @@ const ProgressBar = React.createClass({
   },
 
   _handleStartShouldSetPanResponder(e: Object, gestureState: Object): boolean {
+
     // set true become active when users press down on the processbar.
     // set false to disable
 
@@ -149,6 +150,7 @@ const ProgressBar = React.createClass({
   },
 
   _handleMoveShouldSetPanResponder(e: Object, gestureState: Object): boolean {
+
     // set true become active when users move a touch over the processbar.
     // set false to disable
 
@@ -160,7 +162,7 @@ const ProgressBar = React.createClass({
 
     //users first press down on the processbar
 
-    //this.props.startSeekVideo();
+    this.props.startSeekVideo();
     this._processStyle.style.width = gestureState.x0;
     this._updateProgress();
   },
@@ -171,14 +173,17 @@ const ProgressBar = React.createClass({
 
     this._processStyle.style.width = gestureState.moveX;
     this._updateProgress();
+
   },
 
   _handlePanResponderEnd(e: Object, gestureState: Object) {
 
     //users release the press from the actived progress bar
 
-    var time = this._getProgressPercentage(this._processStyle.style.width, width) * this.props.duration;
-    //this.props.endSeekVideo(time);
+    var _time = this._getProgressPercentage(this._processStyle.style.width, width) * this.props.duration;
+    
+    this.props.endSeekVideo(_time);
+
   },
 
   _handlePanResponderTerminate(e: Object, gestureState: Object) {
@@ -201,7 +206,6 @@ const ProgressBar = React.createClass({
 
 const styles = StyleSheet.create({
   container: {
-    top: 100,
     flex: 1,
     backgroundColor: '#F5FCFF',
   },
@@ -210,19 +214,10 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     position: 'absolute',
   },
-  rect1: {
-    height: 15,
-    position: 'absolute',
-  },
   progressContainer: {
     borderColor: 'green',
     borderWidth: 1,
   },
-  time: {
-    position: 'absolute',
-    fontSize: 10,
-    right: 0,
-  }
 });
 
 module.exports = ProgressBar;
